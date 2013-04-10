@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>JS test from Spiceworks</title>
+    <!-- Rules: No frameworks can be used for this challenge. -->
+
+    <style type="text/css">
+        body      { line-height: 1; }
+        table     { margin: 50px auto 0; }
+        table, td { border: 1px solid #aaa; }
+        td        { padding: 6px 5px; }
+    </style>
+
+</head>
+<body>
+
+<!-- Write the HTML for a table with 5 rows of data, with 5 columns each. -->
+<table id="theTable">
+<tbody>
+<tr>
+    <td>0 0</td>
+    <td>0 1</td>
+    <td>0 2</td>
+    <td>0 3</td>
+    <td>0 4</td>
+</tr>
+<tr>
+    <td>1 0</td>
+    <td>1 1</td>
+    <td>1 2</td>
+    <td>1 3</td>
+    <td>1 4</td>
+</tr>
+<tr>
+    <td>2 0</td>
+    <td>2 1</td>
+    <td>
+        <a href="#">link</a>
+    </td>
+    <td>2 3</td>
+    <td>2 4</td>
+</tr>
+<tr>
+    <td>3 0</td>
+    <td>3 1</td>
+    <td>3 2</td>
+    <td>3 3</td>
+    <td>3 4</td>
+</tr>
+<tr>
+    <td>4 0</td>
+    <td>4 1</td>
+    <td>4 2</td>
+    <td>4 3</td>
+    <td>4 4</td>
+</tr>
+</tbody>
+</table>
+
+<!--
+    // Write a JavaScript click listener event for when a given row is clicked,
+    // which will put the row into edit mode. Just stub out the row edit code, you
+    // do not have to write it.
+
+    Done!
+
+    // One of the columns contains a link that can be clicked and it should not
+    // put the row into edit mode. How does your code from the previous task change?
+
+    I added a function to determine if any children elements contained links. This
+    was used to determine whether or not the click listener should be added to the
+    column.
+
+    // Rows can be added, updated and removed from the table via Ajax, how does this
+    // affect your JavaScript code? Write updated code if needed.
+
+    The code, as-is, already accommodates any number of rows (and columns) by looping
+    through them in the editModeOnClick() function.
+
+    // The table can potentially contain 100s of rows and also includes paging, which
+    // replaces the rows via Ajax. How does this affect your JavaScript code. Write
+    // updated code if needed.
+
+    Ideally, I would include the addEditModeToTable() function in the Ajax as a callback
+    so that click events are added to the new columns.
+
+-->
+
+<script type="text/javascript">
+
+    /* support adding events in all browsers */
+    function addEvent(element, evnt, funct){
+        if (element.attachEvent) {                                              // IE
+            return element.attachEvent('on'+evnt, funct);
+        } else {                                                                // everything else
+            return element.addEventListener(evnt, funct, false);
+        }
+    }
+
+    /* check if a link exists as a child */
+    var hasLink = function(el) {
+        var ret, child;
+        if ( el.children ) {                                                    // check for any children
+            ret = el.children.length !== 0;                                     // return false if there are no children
+        } else {
+            ret = false;                                                        // looks like there ARE children, so
+            for ( child = el.firstChild; child; child = child.nextSibling ) {   // for each child...
+                if ( el.nodeName === 'A' ) {                                    // if it's a link
+                    ret = false;                                                // return false
+                } else {                                                        // otherwise
+                    ret = true;                                                 // return true
+                }
+            }
+        }
+        return ret;
+    };
+
+    /* go into edit mode */
+    var editMode = function() {
+        return (function() { alert('column now editable!'); });                 // this is just the stub
+    };
+
+    /* fire the editMode() function when a cell is clicked  */
+    var addEditModeToTable = function(tbl) {
+        for ( var i = 0, row; row = tbl.rows[i]; i++ ) {                        // for each row...
+            for ( var j = 0, col; col = row.cells[j]; j++ ) {                   // for each column...
+                if ( !hasLink(col) ) {                                          // if the cell does not contain a link
+                    addEvent( col, 'click', editMode() );                       // add the click listener
+                }
+            }
+        }
+    };
+
+    /* get the table */
+    var getTheTable = function() {
+        return document.getElementById('theTable');
+    };
+
+    /* call the function to add the listener */
+    addEditModeToTable(getTheTable());
+
+</script>
+
+</body>
+</html>
